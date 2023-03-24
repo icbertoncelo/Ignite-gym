@@ -5,9 +5,10 @@ import {
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
 import { NativeBaseProvider } from 'native-base'
+
 import { Loading } from '@components/Loading'
 import { DEFAULT_THEME } from './src/theme'
-import { AppRoutes } from '@routes/index'
+import { MainRoutes } from './src/routes'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,7 +23,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      {!fontsLoaded ? <Loading /> : <AppRoutes />}
+      {!fontsLoaded ? <Loading /> : <MainRoutes />}
     </NativeBaseProvider>
   )
 }
