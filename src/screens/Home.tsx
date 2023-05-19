@@ -56,13 +56,7 @@ export function Home() {
         <FlatList
           data={exercises}
           keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <ExerciseCard
-            // name={item}
-            // isActive={selectedGroup === item}
-            // onPress={() => setSelectedGroup(item)}
-            />
-          )}
+          renderItem={({ item }) => <ExerciseCard />}
           _contentContainerStyle={{
             paddingBottom: 20,
           }}
