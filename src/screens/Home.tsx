@@ -1,8 +1,11 @@
+import { useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { FlatList, Heading, HStack, Text, VStack } from 'native-base'
+
 import { ExerciseCard } from '@components/ExerciseCard'
 import { Group } from '@components/Group'
 import { HomeHeader } from '@components/HomeHeader'
-import { FlatList, Heading, HStack, Text, VStack } from 'native-base'
-import { useState } from 'react'
+import { AppNavigatorRoutesProps } from '@routes/app.routes'
 
 export function Home() {
   const [groups, setGroups] = useState([
@@ -18,6 +21,11 @@ export function Home() {
     'Remada Cavalo',
   ])
   const [selectedGroup, setSelectedGroup] = useState('costas')
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  function handleNavigateToExerciseDetailsScreen() {
+    navigation.navigate('exercise')
+  }
 
   return (
     <VStack flex={1}>
@@ -42,7 +50,7 @@ export function Home() {
         maxH={10}
       />
 
-      <VStack flex={''} px={8}>
+      <VStack flex={1} px={8}>
         <HStack justifyContent="space-between" mb={5}>
           <Heading color="gray.200" fontSize="md">
             Exercícios
@@ -56,7 +64,9 @@ export function Home() {
         <FlatList
           data={exercises}
           keyExtractor={(item) => item}
-          renderItem={({ item }) => <ExerciseCard />}
+          renderItem={({ item }) => (
+            <ExerciseCard onPress={handleNavigateToExerciseDetailsScreen} />
+          )}
           _contentContainerStyle={{
             paddingBottom: 20,
           }}
