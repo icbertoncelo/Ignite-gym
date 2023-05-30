@@ -19,6 +19,8 @@ export function Home() {
     'Remada Baixa',
     'Levantamento Terra',
     'Remada Cavalo',
+    'Puxada aberta',
+    'Terra',
   ])
   const [selectedGroup, setSelectedGroup] = useState('costas')
   const navigation = useNavigation<AppNavigatorRoutesProps>()
@@ -70,6 +72,7 @@ export function Home() {
           _contentContainerStyle={{
             paddingBottom: 20,
           }}
+          showsVerticalScrollIndicator={false}
         />
       </VStack>
     </VStack>
