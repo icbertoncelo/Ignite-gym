@@ -2,14 +2,14 @@ import {
   Box,
   Heading,
   HStack,
-  Icon,
+  // Icon,
   Image,
   ScrollView,
   Text,
   VStack,
-} from 'native-base'
+} from '@gluestack-ui/themed'
 import { TouchableOpacity } from 'react-native'
-import { Feather } from '@expo/vector-icons'
+// import { Feather } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '@routes/app.routes'
 
@@ -28,22 +28,22 @@ export function Exercise() {
     <VStack flex={1}>
       <VStack px={8} bg="gray.600" pt={12}>
         <TouchableOpacity onPress={handleGoBack}>
-          <Icon as={Feather} name="arrow-left" color="green.500" size={6} />
+          {/* <Icon as={Feather} name="arrow-left" color="green.500" size={6} /> */}
         </TouchableOpacity>
 
         <HStack
           justifyContent="space-between"
-          mt={4}
-          mb={8}
+          mt="$4"
+          mb="$8"
           alignItems="center"
         >
-          <Heading color="gray.100" fontSize="lg" flexShrink={1}>
+          <Heading color="$gray.100" fontSize="lg" flexShrink={1}>
             Puxada Frontal
           </Heading>
 
           <HStack>
             <BodySvg />
-            <Text color="gray.200" ml={1} textTransform="capitalize">
+            <Text color="$gray.200" ml={1} textTransform="capitalize">
               Costas
             </Text>
           </HStack>
@@ -55,25 +55,25 @@ export function Exercise() {
           source={{
             uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBzvfnvTEW3WcW-GBzeolwiPHXiswMUHxk3A&usqp=CAU',
           }}
-          h={80}
-          w="full"
+          h="$80"
+          w="$full"
           alt="Nome do exercício"
-          mb={3}
+          mb="$3"
           resizeMode="cover"
-          rounded="md"
+          rounded="$md"
         />
 
-        <Box bg="gray.600" rounded="md" p={4}>
-          <HStack alignItems="center" justifyContent="space-around" mb={6}>
+        <Box bg="$gray.600" rounded="$md" p={4}>
+          <HStack alignItems="center" justifyContent="space-around" mb="$6">
             <HStack>
               <SeriesSvg />
-              <Text color="gray.200" ml={2}>
+              <Text color="$gray.200" ml={2}>
                 3 séries
               </Text>
             </HStack>
             <HStack>
               <RepetitionsSvg />
-              <Text color="gray.200" ml={2}>
+              <Text color="$gray.200" ml={2}>
                 12 repetições
               </Text>
             </HStack>

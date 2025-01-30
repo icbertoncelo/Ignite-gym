@@ -1,23 +1,29 @@
-import { Input as NBInput, IInputProps } from 'native-base'
+import { Input as GluestackInput, InputField } from '@gluestack-ui/themed'
+import { ComponentProps } from 'react'
 
-export function Input({ ...rest }: IInputProps) {
+interface InputProps extends ComponentProps<typeof InputField> {
+  error?: string | null
+}
+
+export function Input({ error = null, ...rest }: InputProps) {
   return (
-    <NBInput
-      bg="gray.700"
-      h={14}
-      px={8}
-      borderWidth={0}
-      fontSize="md"
-      color="white"
-      fontFamily="body"
-      mb={4}
-      placeholderTextColor="gray.300"
-      _focus={{
-        bg: 'gray.700',
+    <GluestackInput
+      bg="$gray700"
+      h="$14"
+      px="$8"
+      borderWidth="$0"
+      borderRadius="$md"
+      $focus={{
         borderWidth: 1,
-        borderColor: 'green.500',
+        borderColor: '$green500',
       }}
-      {...rest}
-    />
+    >
+      <InputField
+        color="$white"
+        fontFamily="$body"
+        placeholderTextColor="$gray300"
+        {...rest}
+      />
+    </GluestackInput>
   )
 }

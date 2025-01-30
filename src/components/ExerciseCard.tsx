@@ -1,5 +1,12 @@
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
-import { Heading, HStack, Image, Text, VStack, Icon } from 'native-base'
+import {
+  Heading,
+  HStack,
+  Image,
+  Text,
+  VStack,
+  Icon,
+} from '@gluestack-ui/themed'
 
 import { Entypo } from '@expo/vector-icons'
 
@@ -9,35 +16,35 @@ export function ExerciseCard({ ...rest }: ExerciseCardProps) {
   return (
     <TouchableOpacity {...rest}>
       <HStack
-        bg="gray.500"
+        bg="$gray500"
         alignItems="center"
-        p={2}
-        pr={4}
-        rounded="md"
-        mb={2}
+        p="$2"
+        pr="$4"
+        rounded="$md"
+        mb="$2"
       >
         <Image
           source={{
             uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBzvfnvTEW3WcW-GBzeolwiPHXiswMUHxk3A&usqp=CAU',
           }}
           alt="Imagem do Exercício"
-          w={16}
-          h={16}
-          rounded="md"
-          mr={4}
+          w="$16"
+          h="$16"
+          rounded="$md"
+          mr="$4"
           resizeMode="cover"
         />
 
         <VStack flex={1}>
-          <Heading fontSize="lg" color="white">
+          <Heading fontSize="$lg" color="$white">
             Remada baixa
           </Heading>
-          <Text fontSize="sm" color="gray.200" mt={1} numberOfLines={2}>
+          <Text fontSize="$sm" color="$gray200" mt="$1" numberOfLines={2}>
             series de 12 repetições
           </Text>
         </VStack>
 
-        <Icon as={Entypo} name="chevron-thin-right" color="gray.300" />
+        <Icon as={Entypo} name="chevron-thin-right" color="$gray300" />
       </HStack>
     </TouchableOpacity>
   )

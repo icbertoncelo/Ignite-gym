@@ -1,4 +1,4 @@
-import { Center, Heading } from 'native-base'
+import { Center, Heading } from '@gluestack-ui/themed'
 
 interface ScreenHeaderProps {
   title: string
@@ -6,8 +6,8 @@ interface ScreenHeaderProps {
 
 export function ScreenHeader({ title }: ScreenHeaderProps) {
   return (
-    <Center bg="gray.600" pb={6} pt={16}>
-      <Heading color="gray.100" fontSize="xl">
+    <Center bg="$gray600" pb="$6" pt="$16">
+      <Heading color="$gray100" fontSize="$xl">
         {title}
       </Heading>
     </Center>

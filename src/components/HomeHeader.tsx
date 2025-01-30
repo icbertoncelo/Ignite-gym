@@ -1,29 +1,30 @@
-import { Heading, HStack, Icon, Text, VStack } from 'native-base'
-import { MaterialIcons } from '@expo/vector-icons'
+import { Heading, HStack, Text, Icon, VStack } from '@gluestack-ui/themed'
 import { UserPhoto } from './UserPhoto'
 import { TouchableOpacity } from 'react-native'
+import { LogOut } from 'lucide-react-native'
 
 export function HomeHeader() {
   return (
-    <HStack bg="gray.600" pt={16} pb={5} px={8} alignItems="center">
+    <HStack bg="$gray600" pt="$16" pb="$5" px="$8" alignItems="center">
       <UserPhoto
         source={{
           uri: 'https://github.com/icbertoncelo.png',
         }}
-        size={16}
-        mr={4}
+        w="$16"
+        h="$16"
+        mr="$4"
       />
       <VStack flex={1}>
-        <Text color="gray.100" fontSize="md">
+        <Text color="$gray100" fontSize="$md">
           Olá,
         </Text>
-        <Heading color="gray.100" fontSize="md">
+        <Heading color="$gray100" fontSize="$md">
           Ian Carlos
         </Heading>
       </VStack>
 
       <TouchableOpacity>
-        <Icon as={MaterialIcons} name="logout" color="gray.200" size={7} />
+        <Icon as={LogOut} color="$gray200" size="xl" />
       </TouchableOpacity>
     </HStack>
   )

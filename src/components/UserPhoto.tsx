@@ -1,18 +1,16 @@
-import { IImageProps, Image } from 'native-base'
+import { Image } from '@gluestack-ui/themed'
+import { ComponentProps } from 'react'
 
-interface ImageProps extends IImageProps {
-  size: number
-}
+interface ImageProps extends ComponentProps<typeof Image> {}
 
 export function UserPhoto({ size, ...rest }: ImageProps) {
   return (
     <Image
-      w={size}
       alt="Foto de perfil redonda do usuário"
-      h={size}
-      rounded="full"
-      borderWidth={2}
-      borderColor="gray.400"
+      rounded="$full"
+      borderWidth="$2"
+      borderColor="$gray400"
+      backgroundColor="$gray500"
       {...rest}
     />
   )

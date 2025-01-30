@@ -2,7 +2,6 @@ import {
   createBottomTabNavigator,
   BottomTabNavigationProp,
 } from '@react-navigation/bottom-tabs'
-import { useTheme } from 'native-base'
 import { Platform } from 'react-native'
 
 import { Home } from '@screens/Home'
@@ -13,6 +12,7 @@ import { Exercise } from '@screens/Exercise'
 import HomeSvg from '@assets/home.svg'
 import HistorySvg from '@assets/history.svg'
 import ProfileSvg from '@assets/profile.svg'
+import { gluestackUIConfig } from '../../config/gluestack-ui.config'
 
 type AppTabParamList = {
   home: undefined
@@ -26,22 +26,21 @@ export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppTabParamList>
 const { Navigator, Screen } = createBottomTabNavigator<AppTabParamList>()
 
 export function AppNavigator() {
-  const { sizes, colors } = useTheme()
-
-  const iconSize = sizes[6]
+  const { colors, space } = gluestackUIConfig.tokens
+  const iconSize = space['6']
 
   return (
     <Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: colors.green[500],
-        tabBarInactiveTintColor: colors.gray[200],
+        tabBarActiveTintColor: colors.green500,
+        tabBarInactiveTintColor: colors.gray200,
         tabBarStyle: {
-          backgroundColor: colors.gray[600],
+          backgroundColor: colors.gray600,
           borderTopWidth: 0,
-          height: Platform.OS === 'android' ? 'auto' : sizes[24],
-          padding: Platform.OS === 'android' ? sizes[6] : 'auto',
+          height: Platform.OS === 'android' ? 'auto' : space[24],
+          padding: Platform.OS === 'android' ? space[6] : 'auto',
         },
       }}
     >

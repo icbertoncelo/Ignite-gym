@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { FlatList, Heading, HStack, Text, VStack } from 'native-base'
+import { FlatList, Heading, HStack, Text, VStack } from '@gluestack-ui/themed'
 
 import { ExerciseCard } from '@components/ExerciseCard'
 import { Group } from '@components/Group'
@@ -54,11 +54,11 @@ export function Home() {
 
       <VStack flex={1} px={8}>
         <HStack justifyContent="space-between" mb={5}>
-          <Heading color="gray.200" fontSize="md">
+          <Heading color="gray200" fontSize="$md">
             Exercícios
           </Heading>
 
-          <Text color="gray.200" fontSize="sm">
+          <Text color="gray200" fontSize="$sm">
             {exercises.length}
           </Text>
         </HStack>

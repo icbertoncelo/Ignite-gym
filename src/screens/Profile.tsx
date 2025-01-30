@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Alert, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import {
   Center,
   Heading,
@@ -8,7 +8,7 @@ import {
   Text,
   useToast,
   VStack,
-} from 'native-base'
+} from '@gluestack-ui/themed'
 import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system'
 

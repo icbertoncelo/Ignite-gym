@@ -4,11 +4,11 @@ import {
   Roboto_400Regular,
   Roboto_700Bold,
 } from '@expo-google-fonts/roboto'
-import { NativeBaseProvider } from 'native-base'
+import { GluestackUIStyledProvider } from '@gluestack-ui/themed'
 
 import { Loading } from '@components/Loading'
-import { DEFAULT_THEME } from './src/theme'
 import { MainRoutes } from './src/routes'
+import { config } from './config/gluestack-ui.config'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -17,13 +17,13 @@ export default function App() {
   })
 
   return (
-    <NativeBaseProvider theme={DEFAULT_THEME}>
+    <GluestackUIStyledProvider config={config}>
       <StatusBar
         barStyle="light-content"
         backgroundColor="transparent"
         translucent
       />
       {!fontsLoaded ? <Loading /> : <MainRoutes />}
-    </NativeBaseProvider>
+    </GluestackUIStyledProvider>
   )
 }
