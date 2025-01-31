@@ -1,11 +1,4 @@
-import {
-  Center,
-  Heading,
-  Image,
-  ScrollView,
-  Text,
-  VStack,
-} from '@gluestack-ui/themed'
+import { Center, Heading, Image, Text, VStack } from '@gluestack-ui/themed'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -15,6 +8,7 @@ import BackgroundImg from '@assets/background.png'
 import LogoSvg from '@assets/logo.svg'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
+import { ScrollView } from 'react-native'
 
 interface SignUpFormData {
   name: string

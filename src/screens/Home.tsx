@@ -1,17 +1,18 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { FlatList, Heading, HStack, Text, VStack } from '@gluestack-ui/themed'
+import { Heading, HStack, Text, VStack } from '@gluestack-ui/themed'
 
 import { ExerciseCard } from '@components/ExerciseCard'
 import { Group } from '@components/Group'
 import { HomeHeader } from '@components/HomeHeader'
 import { AppNavigatorRoutesProps } from '@routes/app.routes'
+import { FlatList } from 'react-native'
 
 export function Home() {
   const [groups, setGroups] = useState([
     'Costas',
     'Peito',
-    'Deltoides',
+    'Ombro',
     'Bíceps',
     'Tríceps',
   ])
@@ -33,7 +34,7 @@ export function Home() {
     <VStack flex={1}>
       <HomeHeader />
 
-      <FlatList
+      <FlatList<string>
         data={groups}
         keyExtractor={(item) => item}
         horizontal
@@ -45,31 +46,34 @@ export function Home() {
             onPress={() => setSelectedGroup(item)}
           />
         )}
-        _contentContainerStyle={{
-          px: 8,
+        contentContainerStyle={{
+          paddingHorizontal: 32,
         }}
-        my={10}
-        maxH={10}
+        style={{
+          marginVertical: 32,
+          maxHeight: 44,
+          minHeight: 44,
+        }}
       />
 
-      <VStack flex={1} px={8}>
-        <HStack justifyContent="space-between" mb={5}>
-          <Heading color="gray200" fontSize="$md">
+      <VStack flex={1} px="$8">
+        <HStack justifyContent="space-between" mb="$5">
+          <Heading color="$gray200" fontSize="$md" fontFamily="$heading">
             Exercícios
           </Heading>
 
-          <Text color="gray200" fontSize="$sm">
+          <Text color="$gray200" fontSize="$sm" fontFamily="$body">
             {exercises.length}
           </Text>
         </HStack>
 
-        <FlatList
+        <FlatList<string>
           data={exercises}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
             <ExerciseCard onPress={handleNavigateToExerciseDetailsScreen} />
           )}
-          _contentContainerStyle={{
+          contentContainerStyle={{
             paddingBottom: 20,
           }}
           showsVerticalScrollIndicator={false}

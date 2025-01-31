@@ -8,7 +8,7 @@ import {
   Icon,
 } from '@gluestack-ui/themed'
 
-import { Entypo } from '@expo/vector-icons'
+import { ChevronRight } from 'lucide-react-native'
 
 interface ExerciseCardProps extends TouchableOpacityProps {}
 
@@ -44,7 +44,7 @@ export function ExerciseCard({ ...rest }: ExerciseCardProps) {
           </Text>
         </VStack>
 
-        <Icon as={Entypo} name="chevron-thin-right" color="$gray300" />
+        <Icon as={ChevronRight} color="$gray300" />
       </HStack>
     </TouchableOpacity>
   )

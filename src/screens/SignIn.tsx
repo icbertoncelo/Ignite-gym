@@ -1,11 +1,4 @@
-import {
-  Center,
-  Heading,
-  Image,
-  ScrollView,
-  Text,
-  VStack,
-} from '@gluestack-ui/themed'
+import { Center, Heading, Image, Text, VStack } from '@gluestack-ui/themed'
 import { useNavigation } from '@react-navigation/native'
 
 import BackgroundImg from '@assets/background.png'
@@ -13,6 +6,7 @@ import LogoSvg from '@assets/logo.svg'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
+import { ScrollView } from 'react-native'
 
 export function SignIn() {
   const { navigate } = useNavigation<AuthNavigatorRoutesProps>()

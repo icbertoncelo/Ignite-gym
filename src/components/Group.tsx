@@ -1,14 +1,14 @@
-import { Text, Pressable } from '@gluestack-ui/themed'
+import { Text, Pressable, Button } from '@gluestack-ui/themed'
 import { ComponentProps } from 'react'
 
-interface GroupProps extends ComponentProps<typeof Pressable> {
+interface GroupProps extends ComponentProps<typeof Button> {
   name: string
   isActive?: boolean
 }
 
 export function Group({ name, isActive = false, ...rest }: GroupProps) {
   return (
-    <Pressable
+    <Button
       mr="$3"
       w="$24"
       h="$10"
@@ -16,11 +16,12 @@ export function Group({ name, isActive = false, ...rest }: GroupProps) {
       rounded="$md"
       justifyContent="center"
       alignItems="center"
-      overflow="hidden"
-      // isPressed={isActive}
-      $pressed={{
-        borderColor: '$green600',
-        borderWidth: 1,
+      borderColor="$green500"
+      borderWidth={isActive ? 1 : 0}
+      sx={{
+        ':active': {
+          borderWidth: 1,
+        },
       }}
       {...rest}
     >
@@ -32,6 +33,6 @@ export function Group({ name, isActive = false, ...rest }: GroupProps) {
       >
         {name}
       </Text>
-    </Pressable>
+    </Button>
   )
 }
