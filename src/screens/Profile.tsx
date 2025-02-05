@@ -1,65 +1,59 @@
 import { useState } from 'react'
-import { TouchableOpacity, ScrollView } from 'react-native'
+import { TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { Center, Heading, Text, VStack } from '@gluestack-ui/themed'
 
 import { Input } from '@components/Input'
 import { ScreenHeader } from '@components/ScreenHeader'
 import { UserPhoto } from '@components/UserPhoto'
 import { Button } from '@components/Button'
+import * as ImagePicker from 'expo-image-picker'
+import { getInfoAsync } from 'expo-file-system'
 
 const DEFAULT_PROFILE_URI = 'https://github.com/icbertoncelo.png'
+const PHOTO_SIZE_IN_MB = 5
 
 export function Profile() {
   const [isPhotoLoading, setIsPhotoLoading] = useState(false)
   const [profileImageUri, setProfileImageUri] = useState(DEFAULT_PROFILE_URI)
 
   async function handlePickUserPhoto() {
-    // setIsPhotoLoading(true)
-    // try {
-    //   const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
-    //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //     allowsEditing: true,
-    //     aspect: [4, 3],
-    //     quality: 1,
-    //   })
-    //   if (!selectedPhoto.canceled) {
-    //     const photoUri = selectedPhoto.assets[0].uri
-    //     const photoInfo = await FileSystem.getInfoAsync(photoUri)
-    //     if (photoInfo.size && photoInfo.size / 1024 / 1024 > PHOTO_SIZE_IN_MB) {
-    //       return toast.show({
-    //         title: 'Imagem muito grande',
-    //         description: `Escolha uma imagem de até ${PHOTO_SIZE_IN_MB}Mb`,
-    //         placement: 'top',
-    //         bgColor: 'red.500',
-    //       })
-    //     }
-    //     setProfileImageUri(photoUri)
-    //   }
-    // } catch (error) {
-    //   console.log(error)
-    // } finally {
-    //   setIsPhotoLoading(false)
-    // }
+    setIsPhotoLoading(true)
+    try {
+      const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+      })
+      if (!selectedPhoto.canceled) {
+        const photoUri = selectedPhoto.assets[0].uri
+        const photoInfo = await getInfoAsync(photoUri)
+        if (photoInfo.size && photoInfo.size / 1024 / 1024 < PHOTO_SIZE_IN_MB) {
+          return Alert.alert(
+            'Imagem muito grande',
+            `Escolha uma imagem de até ${PHOTO_SIZE_IN_MB}Mb`,
+          )
+        }
+
+        setProfileImageUri(photoUri)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsPhotoLoading(false)
+    }
   }
 
   return (
     <VStack flex={1}>
       <ScreenHeader title="Perfil" />
+
       <ScrollView
         contentContainerStyle={{
           paddingBottom: 36,
         }}
       >
         <Center mt="$6" px="$10">
-          {/* {isPhotoLoading ? (
-            <Skeleton
-              w={PHOTO_HEIGHT}
-              h={PHOTO_HEIGHT}
-              rounded="full"
-              startColor="$gray500"
-              endColor="$gray400"
-            />
-          ) : ( */}
           <UserPhoto
             source={{
               uri: profileImageUri,
@@ -67,7 +61,6 @@ export function Profile() {
             alt="Foto do usuário"
             size="xl"
           />
-          {/* )} */}
 
           <TouchableOpacity onPress={handlePickUserPhoto}>
             <Text
