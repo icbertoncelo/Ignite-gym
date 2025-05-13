@@ -9,6 +9,7 @@ import { GluestackUIStyledProvider } from '@gluestack-ui/themed'
 import { Loading } from '@components/Loading'
 import { MainRoutes } from './src/routes'
 import { config } from './config/gluestack-ui.config'
+import { AuthProvider } from '@contexts/AuthContext'
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -23,7 +24,13 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      {!fontsLoaded ? <Loading /> : <MainRoutes />}
+      {!fontsLoaded ? (
+        <Loading />
+      ) : (
+        <AuthProvider>
+          <MainRoutes />
+        </AuthProvider>
+      )}
     </GluestackUIStyledProvider>
   )
 }

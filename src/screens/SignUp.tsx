@@ -2,33 +2,16 @@ import { Center, Heading, Image, Text, VStack } from '@gluestack-ui/themed'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
 
 import BackgroundImg from '@assets/background.png'
 import LogoSvg from '@assets/logo.svg'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
-import { ScrollView } from 'react-native'
-
-interface SignUpFormData {
-  name: string
-  email: string
-  password: string
-  passwordConfirmation: string
-}
-
-const signUpSchema = yup.object({
-  name: yup.string().required('Nome obrigatório.'),
-  email: yup.string().required('Email obrigatório').email('Email inválido.'),
-  password: yup
-    .string()
-    .required('Senha obrigatória.')
-    .min(6, 'Senha deve conter um mínimo de 6 caracteres.'),
-  passwordConfirmation: yup
-    .string()
-    .required('Confirmação de senha obrigatório.')
-    .oneOf([yup.ref('password')], 'A confirmação da senha deve ser igual'),
-})
+import { Alert, ScrollView } from 'react-native'
+import { api } from '@services/api'
+import { isAppError } from '@utils/http'
+import { signUpSchema } from '@utils/validations'
+import { SignUpFormData } from '@utils/Dtos'
 
 export function SignUp() {
   const { goBack } = useNavigation()
@@ -47,8 +30,15 @@ export function SignUp() {
     resolver: yupResolver(signUpSchema),
   })
 
-  function handleSignUp(data: SignUpFormData) {
-    console.log(data)
+  async function handleSignUp({ name, email, password }: SignUpFormData) {
+    try {
+      const { data } = await api.post('users', { name, email, password })
+      console.log(data)
+    } catch (error) {
+      if (isAppError(error)) {
+        Alert.alert(error.message)
+      }
+    }
   }
 
   return (
