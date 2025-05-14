@@ -12,9 +12,13 @@ import { api } from '@services/api'
 import { isAppError } from '@utils/http'
 import { signUpSchema } from '@utils/validations'
 import { SignUpFormData } from '@dtos/sign'
+import { useState } from 'react'
+import { useAuth } from '@hooks/useAuth'
 
 export function SignUp() {
   const { goBack } = useNavigation()
+  const { signIn } = useAuth()
+  const [isSignUpLoading, setIsSignUpLoading] = useState(false)
 
   const {
     control,
@@ -32,12 +36,15 @@ export function SignUp() {
 
   async function handleSignUp({ name, email, password }: SignUpFormData) {
     try {
-      const { data } = await api.post('users', { name, email, password })
-      console.log(data)
+      setIsSignUpLoading(true)
+      await api.post('users', { name, email, password })
+      await signIn({ email, password })
     } catch (error) {
       if (isAppError(error)) {
         Alert.alert(error.message)
       }
+    } finally {
+      setIsSignUpLoading(false)
     }
   }
 
@@ -131,6 +138,7 @@ export function SignUp() {
             <Button
               title="Criar e acessar"
               onPress={handleSubmit(handleSignUp)}
+              isLoading={isSignUpLoading}
             />
           </Center>
 

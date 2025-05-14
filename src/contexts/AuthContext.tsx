@@ -1,7 +1,11 @@
 import { SignInFormData } from '@dtos/sign'
 import { User } from '@dtos/user'
 import { api } from '@services/api'
-import { storageGetItem, storageSetItem } from '@utils/storage'
+import {
+  storageGetItem,
+  storageRemoveItem,
+  storageSetItem,
+} from '@utils/storage'
 import {
   createContext,
   ReactNode,
@@ -14,6 +18,7 @@ import { USER_STORAGE } from '@constants/storage'
 interface AuthContextType {
   user: User | null
   signIn: ({ email, password }: SignInFormData) => Promise<void>
+  signOut: () => Promise<void>
   isLoggedUserLoading: boolean
 }
 
@@ -33,6 +38,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     if (data.user) {
       setUser(data.user)
       storageSetItem<User>(USER_STORAGE, data.user)
+    }
+  }, [])
+
+  const signOut = useCallback(async () => {
+    try {
+      serIsLoggedUserLoading(true)
+      await storageRemoveItem(USER_STORAGE)
+      setUser(null)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      serIsLoggedUserLoading(false)
     }
   }, [])
 
@@ -56,7 +73,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [loadLoggedUserFromAsyncStorage])
 
   return (
-    <AuthContext.Provider value={{ user, signIn, isLoggedUserLoading }}>
+    <AuthContext.Provider
+      value={{ user, signIn, signOut, isLoggedUserLoading }}
+    >
       {children}
     </AuthContext.Provider>
   )
