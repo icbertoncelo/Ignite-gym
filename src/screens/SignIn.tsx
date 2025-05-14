@@ -13,7 +13,7 @@ import { useAuth } from '@hooks/useAuth'
 import { isAppError } from '@utils/http'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { signInSchema } from '@utils/validations'
-import { SignInFormData } from '@utils/Dtos'
+import { SignInFormData } from '@dtos/sign'
 
 export function SignIn() {
   const { navigate } = useNavigation<AuthNavigatorRoutesProps>()

@@ -11,7 +11,7 @@ import { Alert, ScrollView } from 'react-native'
 import { api } from '@services/api'
 import { isAppError } from '@utils/http'
 import { signUpSchema } from '@utils/validations'
-import { SignUpFormData } from '@utils/Dtos'
+import { SignUpFormData } from '@dtos/sign'
 
 export function SignUp() {
   const { goBack } = useNavigation()
