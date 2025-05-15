@@ -13,7 +13,8 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { USER_STORAGE } from '@constants/storage'
+import { AUTH_TOKEN_STORAGE, USER_STORAGE } from '@constants/storage'
+import { postSignIn } from 'src/network/sign'
 
 interface AuthContextType {
   user: User | null
@@ -30,41 +31,64 @@ export const AuthContext = createContext({} as AuthContextType)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
-  const [isLoggedUserLoading, serIsLoggedUserLoading] = useState(false)
+  const [isLoggedUserLoading, setIsLoggedUserLoading] = useState(false)
 
   const signIn = useCallback(async ({ email, password }: SignInFormData) => {
-    const { data } = await api.post('/sessions', { email, password })
+    try {
+      setIsLoggedUserLoading(true)
+      const data = await postSignIn({
+        email,
+        password,
+      })
 
-    if (data.user) {
-      setUser(data.user)
-      storageSetItem<User>(USER_STORAGE, data.user)
+      if (data.user && data.token) {
+        await Promise.all([
+          storageSetItem<User>(USER_STORAGE, data.user),
+          storageSetItem<string>(AUTH_TOKEN_STORAGE, data.token),
+        ])
+        setUser(data.user)
+        api.defaults.headers.common.Authorization = `Bearer ${data.token}`
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoggedUserLoading(false)
     }
   }, [])
 
   const signOut = useCallback(async () => {
     try {
-      serIsLoggedUserLoading(true)
-      await storageRemoveItem(USER_STORAGE)
+      setIsLoggedUserLoading(true)
+      await Promise.all([
+        storageRemoveItem(USER_STORAGE),
+        storageRemoveItem(AUTH_TOKEN_STORAGE),
+      ])
       setUser(null)
+      api.defaults.headers.common.Authorization = undefined
     } catch (error) {
       console.log(error)
     } finally {
-      serIsLoggedUserLoading(false)
+      setIsLoggedUserLoading(false)
     }
   }, [])
 
   const loadLoggedUserFromAsyncStorage = useCallback(async () => {
     try {
-      serIsLoggedUserLoading(true)
-      const loggedUser = await storageGetItem<User>(USER_STORAGE)
+      setIsLoggedUserLoading(true)
+      const [loggedUser, authToken] = await Promise.all([
+        storageGetItem<User>(USER_STORAGE),
+        storageGetItem<string>(AUTH_TOKEN_STORAGE),
+      ])
 
-      if (loggedUser) {
+      if (loggedUser && authToken) {
         setUser(loggedUser)
+        api.defaults.headers.common.Authorization = `Bearer ${authToken}`
       }
     } catch (error) {
+      console.log(error)
       setUser(null)
     } finally {
-      serIsLoggedUserLoading(false)
+      setIsLoggedUserLoading(false)
     }
   }, [])
 

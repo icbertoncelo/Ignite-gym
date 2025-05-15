@@ -8,12 +8,12 @@ import LogoSvg from '@assets/logo.svg'
 import { Input } from '@components/Input'
 import { Button } from '@components/Button'
 import { Alert, ScrollView } from 'react-native'
-import { api } from '@services/api'
 import { isAppError } from '@utils/http'
 import { signUpSchema } from '@utils/validations'
 import { SignUpFormData } from '@dtos/sign'
 import { useState } from 'react'
 import { useAuth } from '@hooks/useAuth'
+import { postSignUp } from 'src/network/sign'
 
 export function SignUp() {
   const { goBack } = useNavigation()
@@ -37,7 +37,7 @@ export function SignUp() {
   async function handleSignUp({ name, email, password }: SignUpFormData) {
     try {
       setIsSignUpLoading(true)
-      await api.post('users', { name, email, password })
+      await postSignUp({ name, email, password })
       await signIn({ email, password })
     } catch (error) {
       if (isAppError(error)) {
