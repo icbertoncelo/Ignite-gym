@@ -15,7 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { signInSchema } from '@utils/validations'
 import { SignInFormData } from '@dtos/sign'
 
-export function SignIn() {
+export function SignInScreen() {
   const { navigate } = useNavigation<AuthNavigatorRoutesProps>()
   const { signIn } = useAuth()
   const [isAuthLoading, setIsAuthLoading] = useState(false)

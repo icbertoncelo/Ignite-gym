@@ -2,8 +2,8 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack'
-import { SignIn } from '@screens/SignIn'
-import { SignUp } from '@screens/SignUp'
+import { SignInScreen } from '@screens/SignIn'
+import { SignUpScreen } from '@screens/SignUp'
 
 type AuthStackParamList = {
   signIn: undefined
@@ -22,8 +22,8 @@ export function AuthNavigator() {
         headerShown: false,
       }}
     >
-      <Screen name="signIn" component={SignIn} />
-      <Screen name="signUp" component={SignUp} />
+      <Screen name="signIn" component={SignInScreen} />
+      <Screen name="signUp" component={SignUpScreen} />
     </Navigator>
   )
 }

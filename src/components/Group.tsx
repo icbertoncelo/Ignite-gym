@@ -1,4 +1,4 @@
-import { Text, Pressable, Button } from '@gluestack-ui/themed'
+import { Text, Button } from '@gluestack-ui/themed'
 import { ComponentProps } from 'react'
 
 interface GroupProps extends ComponentProps<typeof Button> {
@@ -10,7 +10,6 @@ export function Group({ name, isActive = false, ...rest }: GroupProps) {
   return (
     <Button
       mr="$3"
-      w="$24"
       h="$10"
       bg="$gray600"
       rounded="$md"

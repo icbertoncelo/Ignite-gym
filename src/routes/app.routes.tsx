@@ -4,21 +4,23 @@ import {
 } from '@react-navigation/bottom-tabs'
 import { Platform } from 'react-native'
 
-import { Home } from '@screens/Home'
-import { Profile } from '@screens/Profile'
-import { History } from '@screens/History'
-import { Exercise } from '@screens/Exercise'
+import { HomeScreen } from '@screens/Home'
+import { ProfileScreen } from '@screens/Profile'
+import { HistoryScreen } from '@screens/History'
+import { ExerciseScreen } from '@screens/Exercise'
 
 import HomeSvg from '@assets/home.svg'
 import HistorySvg from '@assets/history.svg'
 import ProfileSvg from '@assets/profile.svg'
 import { gluestackUIConfig } from '../../config/gluestack-ui.config'
 
-type AppTabParamList = {
+export type AppTabParamList = {
   home: undefined
   history: undefined
   profile: undefined
-  exercise: undefined
+  exercise: {
+    exerciseId: number
+  }
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppTabParamList>
@@ -46,7 +48,7 @@ export function AppNavigator() {
     >
       <Screen
         name="home"
-        component={Home}
+        component={HomeScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <HomeSvg fill={color} width={iconSize} height={iconSize} />
@@ -55,7 +57,7 @@ export function AppNavigator() {
       />
       <Screen
         name="history"
-        component={History}
+        component={HistoryScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <HistorySvg fill={color} width={iconSize} height={iconSize} />
@@ -64,7 +66,7 @@ export function AppNavigator() {
       />
       <Screen
         name="profile"
-        component={Profile}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ color }) => (
             <ProfileSvg fill={color} width={iconSize} height={iconSize} />
@@ -73,7 +75,7 @@ export function AppNavigator() {
       />
       <Screen
         name="exercise"
-        component={Exercise}
+        component={ExerciseScreen}
         options={{
           tabBarButton: () => null,
         }}

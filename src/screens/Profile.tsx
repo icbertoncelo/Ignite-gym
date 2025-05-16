@@ -12,7 +12,7 @@ import { getInfoAsync } from 'expo-file-system'
 const DEFAULT_PROFILE_URI = 'https://github.com/icbertoncelo.png'
 const PHOTO_SIZE_IN_MB = 5
 
-export function Profile() {
+export function ProfileScreen() {
   const [isPhotoLoading, setIsPhotoLoading] = useState(false)
   const [profileImageUri, setProfileImageUri] = useState(DEFAULT_PROFILE_URI)
 

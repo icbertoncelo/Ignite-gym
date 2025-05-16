@@ -10,9 +10,18 @@ import {
 
 import { ChevronRight } from 'lucide-react-native'
 
-interface ExerciseCardProps extends TouchableOpacityProps {}
+interface ExerciseCardProps extends TouchableOpacityProps {
+  name: string
+  repetitions: number
+  thumbUri: string
+}
 
-export function ExerciseCard({ ...rest }: ExerciseCardProps) {
+export function ExerciseCard({
+  name,
+  repetitions,
+  thumbUri,
+  ...rest
+}: ExerciseCardProps) {
   return (
     <TouchableOpacity {...rest}>
       <HStack
@@ -25,7 +34,7 @@ export function ExerciseCard({ ...rest }: ExerciseCardProps) {
       >
         <Image
           source={{
-            uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBzvfnvTEW3WcW-GBzeolwiPHXiswMUHxk3A&usqp=CAU',
+            uri: thumbUri,
           }}
           alt="Imagem do Exercício"
           w="$16"
@@ -37,10 +46,10 @@ export function ExerciseCard({ ...rest }: ExerciseCardProps) {
 
         <VStack flex={1}>
           <Heading fontSize="$lg" color="$white">
-            Remada baixa
+            {name}
           </Heading>
           <Text fontSize="$sm" color="$gray200" mt="$1" numberOfLines={2}>
-            series de 12 repetições
+            {`Séries de ${repetitions} repetições`}
           </Text>
         </VStack>
 

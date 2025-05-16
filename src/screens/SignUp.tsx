@@ -15,7 +15,7 @@ import { useState } from 'react'
 import { useAuth } from '@hooks/useAuth'
 import { postSignUp } from 'src/network/sign'
 
-export function SignUp() {
+export function SignUpScreen() {
   const { goBack } = useNavigation()
   const { signIn } = useAuth()
   const [isSignUpLoading, setIsSignUpLoading] = useState(false)

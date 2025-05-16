@@ -7,23 +7,57 @@ import {
   Text,
   VStack,
 } from '@gluestack-ui/themed'
-import { ScrollView, TouchableOpacity } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
-import { AppNavigatorRoutesProps } from '@routes/app.routes'
+import { Alert, ScrollView, TouchableOpacity } from 'react-native'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { AppNavigatorRoutesProps, AppTabParamList } from '@routes/app.routes'
 
 import BodySvg from 'assets/body.svg'
 import SeriesSvg from 'assets/series.svg'
 import RepetitionsSvg from 'assets/repetitions.svg'
 import { Button } from '@components/Button'
 import { ArrowLeft } from 'lucide-react-native'
+import { useCallback, useEffect, useState } from 'react'
+import { getExercise } from 'src/network/exercise'
+import { isAppError } from '@utils/http'
+import { Loading } from '@components/Loading'
+import { Exercise } from '@dtos/exercises'
 
-export function Exercise() {
+type ExerciseRouteProp = RouteProp<AppTabParamList, 'exercise'>
+
+export function ExerciseScreen() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
+  const route = useRoute<ExerciseRouteProp>()
+
+  const [exercise, setExercise] = useState<Exercise>({} as Exercise)
+  const [isLoadExerciseLoading, setIsLoadExerciseLoading] = useState(false)
+
+  const { exerciseId } = route.params
+
   function handleGoBack() {
     navigation.goBack()
   }
 
-  return (
+  const loadExercise = useCallback(async () => {
+    try {
+      setIsLoadExerciseLoading(true)
+      const data = await getExercise(exerciseId)
+      setExercise(data)
+    } catch (error) {
+      if (isAppError(error)) {
+        return Alert.alert(error.message)
+      }
+    } finally {
+      setIsLoadExerciseLoading(false)
+    }
+  }, [exerciseId])
+
+  useEffect(() => {
+    loadExercise()
+  }, [loadExercise])
+
+  return isLoadExerciseLoading ? (
+    <Loading />
+  ) : (
     <VStack flex={1}>
       <Box px="$8" bg="gray600" pt="$12">
         <HStack justifyContent="space-between" my="$4" alignItems="center">
@@ -31,13 +65,13 @@ export function Exercise() {
             <Icon as={ArrowLeft} color="$green500" size="xl" />
           </TouchableOpacity>
           <Heading color="$gray100" fontSize="$lg" flexShrink={1}>
-            Puxada Frontal
+            {exercise.name}
           </Heading>
 
           <HStack alignItems="center">
             <BodySvg />
             <Text color="$gray200" ml="$1" textTransform="capitalize">
-              Costas
+              {exercise.group}
             </Text>
           </HStack>
         </HStack>
@@ -52,7 +86,7 @@ export function Exercise() {
         <VStack p="$8">
           <Image
             source={{
-              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBzvfnvTEW3WcW-GBzeolwiPHXiswMUHxk3A&usqp=CAU',
+              uri: exercise.demoUri,
             }}
             h="$80"
             w="$full"
@@ -67,13 +101,13 @@ export function Exercise() {
               <HStack alignItems="center">
                 <SeriesSvg />
                 <Text color="$gray200" ml="$2">
-                  3 séries
+                  {`${exercise.series} séries`}
                 </Text>
               </HStack>
               <HStack alignItems="center">
                 <RepetitionsSvg />
                 <Text color="$gray200" ml="$2">
-                  12 repetições
+                  {`${exercise.repetitions} repetições`}
                 </Text>
               </HStack>
             </HStack>

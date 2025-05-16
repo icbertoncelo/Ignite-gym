@@ -10,7 +10,7 @@ interface ExerciseHistoryItem {
   data: string[]
 }
 
-export function History() {
+export function HistoryScreen() {
   const [exercises, setExercises] = useState([
     {
       title: '10.05.2023',
