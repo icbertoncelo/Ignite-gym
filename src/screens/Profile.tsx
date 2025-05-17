@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { Center, Heading, Text, VStack } from '@gluestack-ui/themed'
+import { Controller, useForm } from 'react-hook-form'
 
 import { Input } from '@components/Input'
 import { ScreenHeader } from '@components/ScreenHeader'
@@ -8,6 +9,12 @@ import { UserPhoto } from '@components/UserPhoto'
 import { Button } from '@components/Button'
 import * as ImagePicker from 'expo-image-picker'
 import { getInfoAsync } from 'expo-file-system'
+import { useAuth } from '@hooks/useAuth'
+import { ProfileFormData } from '@dtos/user'
+import { isAppError } from '@utils/http'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { profileSchema } from '@utils/validations'
+import { putProfile } from 'src/network/user'
 
 const DEFAULT_PROFILE_URI = 'https://github.com/icbertoncelo.png'
 const PHOTO_SIZE_IN_MB = 5
@@ -15,6 +22,20 @@ const PHOTO_SIZE_IN_MB = 5
 export function ProfileScreen() {
   const [isPhotoLoading, setIsPhotoLoading] = useState(false)
   const [profileImageUri, setProfileImageUri] = useState(DEFAULT_PROFILE_URI)
+  const [isUpdateProfileLoading, setIsUpdateProfileLoading] = useState(false)
+
+  const { user } = useAuth()
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProfileFormData>({
+    defaultValues: {
+      name: user?.name,
+      email: user?.email,
+    },
+    resolver: yupResolver(profileSchema),
+  })
 
   async function handlePickUserPhoto() {
     setIsPhotoLoading(true)
@@ -41,6 +62,30 @@ export function ProfileScreen() {
       console.log(error)
     } finally {
       setIsPhotoLoading(false)
+    }
+  }
+
+  async function handleUpdateProfile({
+    name,
+    email,
+    newPassword,
+    newPasswordConfirmation,
+    oldPassword,
+  }: ProfileFormData) {
+    try {
+      setIsUpdateProfileLoading(true)
+      await putProfile({
+        name,
+        old_password: oldPassword,
+        password: newPassword,
+      })
+      Alert.alert('Perfil atualizado com sucesso')
+    } catch (error) {
+      if (isAppError(error)) {
+        Alert.alert(error.message)
+      }
+    } finally {
+      setIsUpdateProfileLoading(false)
     }
   }
 
@@ -75,8 +120,34 @@ export function ProfileScreen() {
           </TouchableOpacity>
 
           <Center w="$full" gap="$4">
-            <Input placeholder="Nome" bg="$gray600" />
-            <Input placeholder="Email" bg="$gray600" isReadOnly />
+            <Controller
+              control={control}
+              name="name"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  placeholder="Nome"
+                  bg="$gray600"
+                  value={value}
+                  onChangeText={onChange}
+                  error={errors.name?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  placeholder="Email"
+                  bg="$gray600"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  value={value}
+                  onChangeText={onChange}
+                  isReadOnly
+                />
+              )}
+            />
 
             <Heading
               color="$gray200"
@@ -89,15 +160,56 @@ export function ProfileScreen() {
               Alterar Senha
             </Heading>
 
-            <Input bg="$gray600" placeholder="Senha antiga" secureTextEntry />
-            <Input bg="$gray600" placeholder="Nova Senha" secureTextEntry />
-            <Input
-              bg="$gray600"
-              placeholder="Confirme a nova senha"
-              secureTextEntry
+            <Controller
+              control={control}
+              name="oldPassword"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  bg="$gray600"
+                  placeholder="Senha antiga"
+                  secureTextEntry
+                  value={value}
+                  onChangeText={onChange}
+                  error={errors.oldPassword?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="newPassword"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  bg="$gray600"
+                  placeholder="Nova Senha"
+                  secureTextEntry
+                  value={value}
+                  onChangeText={onChange}
+                  error={errors.newPassword?.message}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="newPasswordConfirmation"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  bg="$gray600"
+                  placeholder="Confirme a nova senha"
+                  secureTextEntry
+                  value={value}
+                  onChangeText={onChange}
+                  error={errors.newPasswordConfirmation?.message}
+                  onSubmitEditing={handleSubmit(handleUpdateProfile)}
+                />
+              )}
             />
 
-            <Button title="Atualizar" mt="$4" />
+            <Button
+              title="Atualizar"
+              mt="$4"
+              onPress={handleSubmit(handleUpdateProfile)}
+              isLoading={isUpdateProfileLoading}
+            />
           </Center>
         </Center>
       </ScrollView>

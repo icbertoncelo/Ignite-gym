@@ -20,3 +20,35 @@ export const signUpSchema = yup.object({
     .required('Confirmação de senha obrigatório.')
     .oneOf([yup.ref('password')], 'A confirmação da senha deve ser igual'),
 })
+
+export const profileSchema = yup.object({
+  name: yup.string().required('Nome é obrigatório.'),
+  oldPassword: yup
+    .string()
+    .transform((value) => value || null)
+    .when('newPassword', {
+      is: (value: string | null) => !!value,
+      then: (schema) =>
+        schema.required('Senha atual é obrigatória para alterar a senha.'),
+      otherwise: (schema) => schema.nullable(),
+    }),
+  newPassword: yup
+    .string()
+    .min(6, 'A nova senha deve conter no mínimo 6 caracteres.')
+    .nullable()
+    .transform((value) => value || null),
+  newPasswordConfirmation: yup
+    .string()
+    .transform((value) => value || null)
+    .when('newPassword', {
+      is: (value: string | null) => !!value,
+      then: (schema) =>
+        schema
+          .required('Confirmação da nova senha é obrigatória.')
+          .oneOf(
+            [yup.ref('newPassword')],
+            'A confirmação da senha deve ser igual à nova senha.',
+          ),
+      otherwise: (schema) => schema.nullable(),
+    }),
+})
