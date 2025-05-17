@@ -21,6 +21,7 @@ interface AuthContextType {
   signIn: ({ email, password }: SignInFormData) => Promise<void>
   signOut: () => Promise<void>
   isLoggedUserLoading: boolean
+  onUpdateUserProfile: (user: User) => Promise<void>
 }
 
 interface AuthProviderProps {
@@ -92,13 +93,31 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [])
 
+  const onUpdateUserProfile = useCallback(async (updatedProfile: User) => {
+    try {
+      setIsLoggedUserLoading(true)
+      await storageSetItem<User>(USER_STORAGE, updatedProfile)
+      setUser(updatedProfile)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoggedUserLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     loadLoggedUserFromAsyncStorage()
   }, [loadLoggedUserFromAsyncStorage])
 
   return (
     <AuthContext.Provider
-      value={{ user, signIn, signOut, isLoggedUserLoading }}
+      value={{
+        user,
+        signIn,
+        signOut,
+        isLoggedUserLoading,
+        onUpdateUserProfile,
+      }}
     >
       {children}
     </AuthContext.Provider>

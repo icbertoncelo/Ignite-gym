@@ -23,8 +23,8 @@ export function ProfileScreen() {
   const [isPhotoLoading, setIsPhotoLoading] = useState(false)
   const [profileImageUri, setProfileImageUri] = useState(DEFAULT_PROFILE_URI)
   const [isUpdateProfileLoading, setIsUpdateProfileLoading] = useState(false)
+  const { user, onUpdateUserProfile } = useAuth()
 
-  const { user } = useAuth()
   const {
     control,
     handleSubmit,
@@ -67,9 +67,7 @@ export function ProfileScreen() {
 
   async function handleUpdateProfile({
     name,
-    email,
     newPassword,
-    newPasswordConfirmation,
     oldPassword,
   }: ProfileFormData) {
     try {
@@ -79,6 +77,8 @@ export function ProfileScreen() {
         old_password: oldPassword,
         password: newPassword,
       })
+      user && (await onUpdateUserProfile({ ...user, name }))
+
       Alert.alert('Perfil atualizado com sucesso')
     } catch (error) {
       if (isAppError(error)) {
