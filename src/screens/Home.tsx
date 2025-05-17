@@ -21,7 +21,7 @@ export function HomeScreen() {
   const [selectedGroup, setSelectedGroup] = useState('costas')
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
-  function handleNavigateToExerciseDetailsScreen(exerciseId: number) {
+  function handleNavigateToExerciseDetailsScreen(exerciseId: string) {
     navigation.navigate('exercise', {
       exerciseId,
     })
@@ -73,6 +73,7 @@ export function HomeScreen() {
       }
     }, [selectedGroup]),
   )
+
   return (
     <VStack flex={1}>
       <HomeHeader />
@@ -115,7 +116,7 @@ export function HomeScreen() {
 
           <FlatList<Exercise>
             data={exercises}
-            keyExtractor={(item) => String(item.id)}
+            keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <ExerciseCard
                 onPress={() => handleNavigateToExerciseDetailsScreen(item.id)}

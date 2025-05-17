@@ -1,6 +1,12 @@
 import { Heading, HStack, Text, VStack } from '@gluestack-ui/themed'
 
-export function HistoryCard() {
+interface HistoryCardProps {
+  name: string
+  group: string
+  hour: string
+}
+
+export function HistoryCard({ name, group, hour }: HistoryCardProps) {
   return (
     <HStack
       w="$full"
@@ -20,14 +26,14 @@ export function HistoryCard() {
           textTransform="capitalize"
           numberOfLines={1}
         >
-          Costas
+          {group}
         </Heading>
         <Text color="$gray100" fontSize="$lg" numberOfLines={1}>
-          Remada baixa
+          {name}
         </Text>
       </VStack>
       <Text color="$gray300" fontSize="$md">
-        08:30
+        {hour}
       </Text>
     </HStack>
   )

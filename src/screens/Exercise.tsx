@@ -21,6 +21,7 @@ import { getExercise } from 'src/network/exercise'
 import { isAppError } from '@utils/http'
 import { Loading } from '@components/Loading'
 import { Exercise } from '@dtos/exercises'
+import { postHistory } from 'src/network/history'
 
 type ExerciseRouteProp = RouteProp<AppTabParamList, 'exercise'>
 
@@ -30,6 +31,8 @@ export function ExerciseScreen() {
 
   const [exercise, setExercise] = useState<Exercise>({} as Exercise)
   const [isLoadExerciseLoading, setIsLoadExerciseLoading] = useState(false)
+  const [isRegisterExerciseLoading, setIsRegisterExerciseLoading] =
+    useState(false)
 
   const { exerciseId } = route.params
 
@@ -50,6 +53,21 @@ export function ExerciseScreen() {
       setIsLoadExerciseLoading(false)
     }
   }, [exerciseId])
+
+  async function handleRegisterExercise() {
+    try {
+      setIsRegisterExerciseLoading(true)
+      await postHistory(exerciseId)
+      Alert.alert('Exercício registrado com sucesso')
+      navigation.navigate('history')
+    } catch (error) {
+      if (isAppError(error)) {
+        return Alert.alert(error.message)
+      }
+    } finally {
+      setIsRegisterExerciseLoading(false)
+    }
+  }
 
   useEffect(() => {
     loadExercise()
@@ -112,7 +130,11 @@ export function ExerciseScreen() {
               </HStack>
             </HStack>
 
-            <Button title="Marcar como realizado" />
+            <Button
+              title="Marcar como realizado"
+              onPress={handleRegisterExercise}
+              isLoading={isRegisterExerciseLoading}
+            />
           </Box>
         </VStack>
       </ScrollView>

@@ -1,5 +1,5 @@
 export interface ExerciseApiResponse {
-  id: number
+  id: string
   demo: string
   group: string
   name: string

@@ -19,7 +19,7 @@ export type AppTabParamList = {
   history: undefined
   profile: undefined
   exercise: {
-    exerciseId: number
+    exerciseId: string
   }
 }
 

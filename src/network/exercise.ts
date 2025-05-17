@@ -20,7 +20,7 @@ export async function getExercisesByGroup(group: string): Promise<Exercise[]> {
   return dataWithUri
 }
 
-export async function getExercise(exerciseId: number): Promise<Exercise> {
+export async function getExercise(exerciseId: string): Promise<Exercise> {
   const { data } = await api.get<ExerciseApiResponse>(
     `/exercises/${exerciseId}`,
   )
