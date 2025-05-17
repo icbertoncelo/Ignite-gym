@@ -9,9 +9,9 @@ import defaultProfilePhoto from '@assets/userPhotoDefault.png'
 export function HomeHeader() {
   const { user, signOut } = useAuth()
 
-  const avatarSource = user?.avatar
+  const avatarSource = user?.avatarUri
     ? {
-        uri: user.avatar,
+        uri: user.avatarUri,
       }
     : defaultProfilePhoto
 

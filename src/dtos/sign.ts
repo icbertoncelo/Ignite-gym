@@ -1,4 +1,4 @@
-import { User } from './user'
+import { User, UserApiResponse } from './user'
 
 export interface SignUpFormData {
   name: string
@@ -21,6 +21,11 @@ export interface PostSignUpApiPayload {
 export interface PostSignInApiPayload extends SignInFormData {}
 
 export interface PostSignInApiResponse {
+  user: UserApiResponse
+  token: string
+}
+
+export interface Auth {
   user: User
   token: string
 }

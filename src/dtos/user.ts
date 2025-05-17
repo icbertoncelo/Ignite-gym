@@ -1,8 +1,12 @@
-export interface User {
+export interface UserApiResponse {
   id: string
   name: string
   email: string
   avatar: string
+}
+
+export interface User extends UserApiResponse {
+  avatarUri: string
 }
 
 export interface ProfileFormData {

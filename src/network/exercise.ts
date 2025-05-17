@@ -12,7 +12,7 @@ export async function getExercisesByGroup(group: string): Promise<Exercise[]> {
     `/exercises/bygroup/${group}`,
   )
 
-  const dataWithUri = data.map((exercise) => ({
+  const dataWithUri: Exercise[] = data.map((exercise) => ({
     ...exercise,
     thumbUri: `${api.defaults.baseURL}/exercise/thumb/${exercise.thumb}`,
   }))
@@ -25,7 +25,7 @@ export async function getExercise(exerciseId: string): Promise<Exercise> {
     `/exercises/${exerciseId}`,
   )
 
-  const dataWithUri = {
+  const dataWithUri: Exercise = {
     ...data,
     demoUri: `${api.defaults.baseURL}/exercise/demo/${data.demo}`,
   }
