@@ -1,11 +1,7 @@
 import { SignInFormData } from '@dtos/sign'
 import { User } from '@dtos/user'
 import { api } from '@services/api'
-import {
-  storageGetItem,
-  storageRemoveItem,
-  storageSetItem,
-} from '@utils/storage'
+import { storageRemoveItem } from '@utils/storage'
 import {
   createContext,
   ReactNode,
@@ -15,6 +11,12 @@ import {
 } from 'react'
 import { AUTH_TOKEN_STORAGE, USER_STORAGE } from '@constants/storage'
 import { postSignIn } from 'src/network/sign'
+import {
+  getTokensFromStorage,
+  getUserFromStorage,
+  setTokensOnStorage,
+  setUserOnStorage,
+} from '@utils/auth'
 
 interface AuthContextType {
   user: User | null
@@ -42,10 +44,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
       })
 
-      if (data.user && data.token) {
+      const responseSuccess = data.user && data.token && data.refresh_token
+
+      if (responseSuccess) {
+        const tokenStorageValue = {
+          token: data.token,
+          refresh_token: data.refresh_token,
+        }
+
         await Promise.all([
-          storageSetItem<User>(USER_STORAGE, data.user),
-          storageSetItem<string>(AUTH_TOKEN_STORAGE, data.token),
+          setUserOnStorage(data.user),
+          setTokensOnStorage(tokenStorageValue),
         ])
         setUser(data.user)
         api.defaults.headers.common.Authorization = `Bearer ${data.token}`
@@ -76,14 +85,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const loadLoggedUserFromAsyncStorage = useCallback(async () => {
     try {
       setIsLoggedUserLoading(true)
-      const [loggedUser, authToken] = await Promise.all([
-        storageGetItem<User>(USER_STORAGE),
-        storageGetItem<string>(AUTH_TOKEN_STORAGE),
+      const [loggedUser, authTokens] = await Promise.all([
+        getUserFromStorage(),
+        getTokensFromStorage(),
       ])
 
-      if (loggedUser && authToken) {
+      if (loggedUser && authTokens) {
         setUser(loggedUser)
-        api.defaults.headers.common.Authorization = `Bearer ${authToken}`
+        api.defaults.headers.common.Authorization = `Bearer ${authTokens.token}`
       }
     } catch (error) {
       console.log(error)
@@ -96,7 +105,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const onUpdateUserProfile = useCallback(async (updatedProfile: User) => {
     try {
       setIsLoggedUserLoading(true)
-      await storageSetItem<User>(USER_STORAGE, updatedProfile)
+      await setUserOnStorage(updatedProfile)
       setUser(updatedProfile)
     } catch (error) {
       console.log(error)
@@ -107,7 +116,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     loadLoggedUserFromAsyncStorage()
-  }, [loadLoggedUserFromAsyncStorage])
+    const subscribe = api.registerInterceptTokenManager(signOut)
+
+    return () => {
+      subscribe()
+    }
+  }, [loadLoggedUserFromAsyncStorage, signOut])
 
   return (
     <AuthContext.Provider

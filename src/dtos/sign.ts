@@ -19,13 +19,15 @@ export interface PostSignUpApiPayload {
 }
 
 export interface PostSignInApiPayload extends SignInFormData {}
-
-export interface PostSignInApiResponse {
-  user: UserApiResponse
+export type TokenInfo = {
   token: string
+  refresh_token: string
 }
 
-export interface Auth {
+export type PostSignInApiResponse = TokenInfo & {
+  user: UserApiResponse
+}
+
+export type Auth = TokenInfo & {
   user: User
-  token: string
 }

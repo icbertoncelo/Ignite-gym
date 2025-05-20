@@ -10,7 +10,7 @@ export async function postSignIn(payload: PostSignInApiPayload): Promise<Auth> {
   const { data } = await api.post<PostSignInApiResponse>('/sessions', payload)
 
   const dataWithUri: Auth = {
-    token: data.token,
+    ...data,
     user: {
       ...data.user,
       avatarUri: `${api.defaults.baseURL}/avatar/${data.user.avatar}`,
