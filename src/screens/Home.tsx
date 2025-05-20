@@ -15,7 +15,6 @@ import { Loading } from '@components/Loading'
 
 export function HomeScreen() {
   const [groups, setGroups] = useState<string[]>([])
-  const [isLoadGroupsLoading, setIsLoadGroupsLoading] = useState(false)
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [isLoadExercisesLoading, setIsLoadExercisesLoading] = useState(false)
   const [selectedGroup, setSelectedGroup] = useState('costas')
@@ -29,15 +28,12 @@ export function HomeScreen() {
 
   const loadGroups = useCallback(async () => {
     try {
-      setIsLoadGroupsLoading(true)
       const data = await getGroups()
       setGroups(data)
     } catch (error) {
       if (isAppError(error)) {
         return Alert.alert(error.message)
       }
-    } finally {
-      setIsLoadGroupsLoading(false)
     }
   }, [])
 

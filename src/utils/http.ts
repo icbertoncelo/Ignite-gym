@@ -1,11 +1,11 @@
 import { STATUS_CODES } from '@constants/http'
 import { AppError } from './AppError'
 
-export function isAppError(error: Error | unknown): boolean {
+export function isAppError(error: unknown) {
   return error instanceof AppError
 }
 
-export function isUnauthorizedError(status?: number): boolean {
+export function isUnauthorizedError(status?: number) {
   const statusNumber = Number(status)
   return (
     !!statusNumber &&
